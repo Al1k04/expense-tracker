@@ -1,3 +1,3 @@
 export default function Expense() {
-  return <div>Expense</div>;
+  return <div className="text-center">Expense</div>;
 }
