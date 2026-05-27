@@ -6,6 +6,13 @@ import { ListItemButton } from "@mui/material";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
+  LayoutDashboard,
+  CreditCard,
+  Plane,
+  Settings,
+  Info,
+} from "lucide-react";
+import {
   List,
   ListItem,
   ListItemText,
@@ -18,11 +25,11 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const navItems = [
-    { label: "Dashboard", path: "/" },
-    { label: "Expenses", path: "/expenses" },
-    { label: "Trips", path: "/trips" },
-    { label: "Settings", path: "/settings" },
-    { label: "About", path: "/about" },
+    { label: "Dashboard", path: "/", icon: LayoutDashboard },
+    { label: "Expenses", path: "/expenses", icon: CreditCard },
+    { label: "Trips", path: "/trips", icon: Plane },
+    { label: "Settings", path: "/settings", icon: Settings },
+    { label: "About", path: "/about", icon: Info },
   ];
 
   return (
@@ -67,7 +74,8 @@ export default function Sidebar() {
               }}
             >
               <ListItemButton component={Link} href={item.path}>
-                <ListItemText primary={item.label} />
+                <item.icon size={20} />
+                <ListItemText primary={item.label} sx={{ ml: "20px" }} />
               </ListItemButton>
             </ListItem>
           ))}
