@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import { Plus } from "lucide-react";
 import MetricCard from "@/components/dashboard/MetricCards";
+import Charts from "@/components/dashboard/Charts";
 
 export default function DashBoard() {
   return (
@@ -18,6 +19,7 @@ export default function DashBoard() {
         </div>
       </div>
       <MetricCard />
+      <Charts />
     </div>
   );
 }
