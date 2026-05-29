@@ -7,10 +7,8 @@ export default function RootLayout({
 }) {
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar Component */}
       <Sidebar />
 
-      {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto p-4">{children}</main>
     </div>
   );

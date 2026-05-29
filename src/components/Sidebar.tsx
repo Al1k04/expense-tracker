@@ -2,9 +2,10 @@
 
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import { ListItemButton } from "@mui/material";
+import { Button, ListItemButton } from "@mui/material";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+
 import {
   LayoutDashboard,
   CreditCard,
@@ -80,6 +81,23 @@ export default function Sidebar() {
             </ListItem>
           ))}
         </List>
+        <Box
+          sx={{
+            mt: "auto",
+            mb: "50px",
+            p: "10px",
+            display: "flex",
+            justifyContent: "center",
+            gap: "10px",
+          }}
+        >
+          <Button variant="contained" component={Link} href="/login">
+            Login
+          </Button>
+          <Button variant="contained" component={Link} href="/signUp">
+            SignUp
+          </Button>
+        </Box>
       </Drawer>
     </Box>
   );
