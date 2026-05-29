@@ -12,7 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   pages: {
-    signIn: "/login", // Your custom route
+    signIn: "/login",
     newUser: "/auth/new-user",
   },
 });
