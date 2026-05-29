@@ -1,7 +1,8 @@
 "use client";
-import theme from "@/lib/theme";
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -9,12 +10,25 @@ type Inputs = {
 };
 
 export default function App() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const result = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      console.error("Login failed");
+    }
+    router.push("/");
+  };
 
   return (
     <Box
