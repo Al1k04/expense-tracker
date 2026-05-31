@@ -7,6 +7,8 @@ import { loginSchema } from "@/lib/validation";
 import { LoginInput } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
 
 export default function App() {
   const router = useRouter();
@@ -87,6 +89,26 @@ export default function App() {
           <Button variant="contained" type="submit" sx={{ mt: "15px" }}>
             Submit
           </Button>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "30px",
+              my: "20px",
+            }}
+          >
+            <Button
+              type="button"
+              variant="contained"
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+            >
+              <FcGoogle className="flex items-center mr-2" size={22} />
+              Google
+            </Button>
+            <Typography>
+              Don't have any account? <Link href="/signUp">signup</Link>
+            </Typography>
+          </Box>
         </form>
       </Card>
     </Box>
