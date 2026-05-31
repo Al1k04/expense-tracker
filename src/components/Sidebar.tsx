@@ -5,6 +5,8 @@ import Drawer from "@mui/material/Drawer";
 import { Button, ListItemButton } from "@mui/material";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 import {
   LayoutDashboard,
@@ -24,6 +26,9 @@ export default function Sidebar() {
   const drawerWidth = 240;
 
   const pathname = usePathname();
+
+  const { data: session, status, update } = useSession();
+  console.log(status, session);
 
   const navItems = [
     { label: "Dashboard", path: "/", icon: LayoutDashboard },
@@ -91,12 +96,30 @@ export default function Sidebar() {
             gap: "10px",
           }}
         >
-          <Button variant="contained" component={Link} href="/login">
-            Login
-          </Button>
-          <Button variant="contained" component={Link} href="/signUp">
-            SignUp
-          </Button>
+          {status === "authenticated" ? (
+            <div className="flex ">
+              <p className="text-white flex-1 mr-5 items-center">
+                Welcome back, <strong>{session?.user?.name}</strong>!
+              </p>
+
+              <Button
+                variant="contained"
+                onClick={() => signOut()}
+                sx={{ p: "4px 8px" }}
+              >
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <Button variant="contained" component={Link} href="/login">
+                Login
+              </Button>
+              <Button variant="contained" component={Link} href="/signUp">
+                SignUp
+              </Button>
+            </div>
+          )}
         </Box>
       </Drawer>
     </Box>

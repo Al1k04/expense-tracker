@@ -3,11 +3,10 @@ import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
-type Inputs = {
-  email: string;
-  password: string;
-};
+import { loginSchema } from "@/lib/validation";
+import { LoginInput } from "@/lib/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
 
 export default function App() {
   const router = useRouter();
@@ -15,9 +14,11 @@ export default function App() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     const result = await signIn("credentials", {
       email: data.email,
       password: data.password,
@@ -25,7 +26,7 @@ export default function App() {
     });
 
     if (result?.error) {
-      console.error("Login failed");
+      return toast.error("Login failed");
     }
     router.push("/");
   };
@@ -65,18 +66,22 @@ export default function App() {
             id="outlined-basic"
             label="Enter your email address"
             variant="outlined"
-            defaultValue="test"
             {...register("email")}
           />
+          {errors.email && (
+            <span className="text-red-600">{errors.email.message}</span>
+          )}
 
           <TextField
             id="outlined-basic"
             label="Enter your password"
             variant="outlined"
             type="password"
-            {...register("password", { required: true })}
+            {...register("password")}
           />
-          {errors.password && <span>This field is required</span>}
+          {errors.password && (
+            <span className="text-red-600">{errors.password.message}</span>
+          )}
 
           <Button variant="contained" type="submit" sx={{ mt: "15px" }}>
             Submit
