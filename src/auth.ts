@@ -40,7 +40,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
     newUser: "/auth/new-user",
   },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) token.id = user.id;
+      return token;
+    },
+    session({ session, token }) {
+      session.user.id = token.id as string;
+      return session;
+    },
+  },
   session: {
     strategy: "jwt",
+  },
+  cookies: {
+    sessionToken: {
+      name: "authjs.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: false,
+      },
+    },
   },
 });

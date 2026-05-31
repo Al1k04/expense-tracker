@@ -24,11 +24,12 @@ export default function App() {
       password: data.password,
       redirect: false,
     });
+    console.log(result);
 
     if (result?.error) {
       return toast.error("Login failed");
     }
-    router.push("/");
+    window.location.href = "/";
   };
 
   return (
