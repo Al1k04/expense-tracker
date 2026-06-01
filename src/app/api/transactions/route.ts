@@ -17,13 +17,25 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(transactions);
 }
 
-// Handle POST requests (e.g., submitting data)
 export async function POST(request: NextRequest) {
-  try {
-    // Parse the incoming JSON body
-    const body = await request.json();
+  const session = await auth();
+  const body = await request.json();
 
-    // Process your logic (e.g., save to a database)
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const transaction = await prisma.transaction.create({
+    data: {
+      description: body.description,
+      category: body.category,
+      amount: parseFloat(body.amount),
+      date: new Date(body.date),
+      type: body.type,
+      userId: session?.user?.id,
+    },
+  });
+  try {
     return NextResponse.json(
       { message: "Data received", data: body },
       { status: 201 },
