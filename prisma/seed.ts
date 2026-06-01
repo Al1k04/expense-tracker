@@ -39,6 +39,14 @@ async function main() {
         type: "expense",
         userId: user.id,
       },
+      {
+        description: "Job",
+        category: "salary",
+        amount: 3000,
+        date: new Date("2026-09-21"),
+        type: "income",
+        userId: user.id,
+      },
     ],
   });
   return hashedPassword;

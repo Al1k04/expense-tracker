@@ -6,25 +6,32 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Box } from "@mui/material";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma";
 
-function createData(
-  name: string,
-  category: string,
-  date: string,
-  amount: number,
-  color: string,
-) {
-  return { name, category, date, amount, color };
-}
+// function createData(
+//   name: string,
+//   category: string,
+//   date: string,
+//   amount: number,
+//   color: string,
+// ) {
+//   return { name, category, date, amount, color };
+// }
 
-const rows = [
-  createData("Grocery store", "Food", "May 24", 48.5, "#1D9E75"),
-  createData("Salary", "Income", "May 22", 3200, "#0F6E56"),
-  createData("Uber ride", "Transport", "May 21", 12.0, "#185FA5"),
-  createData("Netflix", "Entertainment", "May 20", 15.99, "#854F0B"),
-];
+// const rows = [
+//   createData("Grocery store", "Food", "May 24", 48.5, "#1D9E75"),
+//   createData("Salary", "Income", "May 22", 3200, "#0F6E56"),
+//   createData("Uber ride", "Transport", "May 21", 12.0, "#185FA5"),
+//   createData("Netflix", "Entertainment", "May 20", 15.99, "#854F0B"),
+// ];
 
-export default function RecentTransactions() {
+export default async function RecentTransactions() {
+  const session = await auth();
+
+  const transactions = await prisma.transaction.findMany({
+    where: { userId: session?.user?.id },
+  });
   return (
     <Box sx={{ mt: 4, mx: 10 }}>
       <TableContainer component={Paper}>
@@ -38,27 +45,30 @@ export default function RecentTransactions() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {transactions.map((transaction) => (
               <TableRow
-                key={row.name}
+                key={transaction.description}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell align="left">{row.name}</TableCell>
+                <TableCell align="left">{transaction.category}</TableCell>
                 <TableCell align="left">
                   <span
                     style={{
-                      backgroundColor: row.color,
+                      backgroundColor:
+                        transaction.type === "income" ? "#1D9E75" : "#A32D2D",
                       color: "#fff",
                       padding: "2px 10px",
                       borderRadius: "12px",
                       fontSize: "12px",
                     }}
                   >
-                    {row.category}
+                    {transaction.category}
                   </span>
                 </TableCell>
-                <TableCell align="left">{row.date}</TableCell>
-                <TableCell align="left">{row.amount}</TableCell>
+                <TableCell align="left">
+                  {transaction.date.toLocaleDateString()}
+                </TableCell>
+                <TableCell align="left">{transaction.amount}</TableCell>
               </TableRow>
             ))}
           </TableBody>
