@@ -12,22 +12,70 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { name: "Jan", income: 4000, expense: 2400 },
-  { name: "Feb", income: 3000, expense: 1398 },
-  { name: "Mar", income: 2000, expense: 9800 },
-  { name: "Apr", income: 2780, expense: 3908 },
-  { name: "May", income: 1890, expense: 4800 },
-];
+interface Transaction {
+  id: string;
+  amount: number;
+  category: string;
+  date: Date;
+  type: string;
+}
 
-const categoryData = [
-  { category: "Food", amount: 850 },
-  { category: "Transport", amount: 420 },
-  { category: "Entertainment", amount: 300 },
-  { category: "Shopping", amount: 650 },
-];
+interface ChartsProps {
+  transactions: Transaction[];
+}
 
-export default function Сharts() {
+export const Charts: React.FC<ChartsProps> = ({ transactions }) => {
+  const result = transactions.reduce(
+    (
+      acc: Record<string, { name: string; income: number; expense: number }>,
+      current,
+    ) => {
+      const shortMonth = current.date.toLocaleString("ru-RU", {
+        month: "short",
+      });
+
+      // Если месяца еще нет в аккумуляторе, создаем его с базовыми значениями
+      if (!acc[shortMonth]) {
+        acc[shortMonth] = {
+          name: shortMonth,
+          income: 0,
+          expense: 0,
+        };
+      }
+
+      // Прибавляем значения в зависимости от типа операции
+      if (current.type === "income") {
+        acc[shortMonth].income += current.amount;
+      } else if (current.type === "expense") {
+        acc[shortMonth].expense += current.amount;
+      }
+
+      return acc;
+    },
+    {},
+  );
+
+  // Переводим объект обратно в массив, если это нужно для рендеринга в Next.js
+  const chartData = Object.values(result);
+
+  const categoryData = transactions.reduce((acc: Record<string, number>, t) => {
+    const { category, amount } = t;
+
+    if (!acc[category]) {
+      acc[category] = 0;
+    }
+
+    acc[category] += amount;
+
+    return acc;
+  }, {});
+
+  const categoryChartData = Object.entries(categoryData).map(
+    ([category, amount]) => ({
+      category,
+      amount,
+    }),
+  );
   return (
     <Box
       sx={{
@@ -39,7 +87,7 @@ export default function Сharts() {
     >
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
-          data={data}
+          data={chartData}
           margin={{ top: 70, right: 30, left: 50, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -60,7 +108,7 @@ export default function Сharts() {
       </ResponsiveContainer>
 
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={categoryData}>
+        <BarChart data={categoryChartData}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="category" />
           <YAxis />
@@ -70,4 +118,4 @@ export default function Сharts() {
       </ResponsiveContainer>
     </Box>
   );
-}
+};
