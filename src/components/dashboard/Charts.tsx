@@ -30,11 +30,10 @@ export const Charts: React.FC<ChartsProps> = ({ transactions }) => {
       acc: Record<string, { name: string; income: number; expense: number }>,
       current,
     ) => {
-      const shortMonth = current.date.toLocaleString("ru-RU", {
+      const shortMonth = current.date.toLocaleString("en-En", {
         month: "short",
       });
 
-      // Если месяца еще нет в аккумуляторе, создаем его с базовыми значениями
       if (!acc[shortMonth]) {
         acc[shortMonth] = {
           name: shortMonth,
@@ -43,7 +42,6 @@ export const Charts: React.FC<ChartsProps> = ({ transactions }) => {
         };
       }
 
-      // Прибавляем значения в зависимости от типа операции
       if (current.type === "income") {
         acc[shortMonth].income += current.amount;
       } else if (current.type === "expense") {
@@ -55,7 +53,6 @@ export const Charts: React.FC<ChartsProps> = ({ transactions }) => {
     {},
   );
 
-  // Переводим объект обратно в массив, если это нужно для рендеринга в Next.js
   const chartData = Object.values(result);
 
   const categoryData = transactions.reduce((acc: Record<string, number>, t) => {

@@ -8,23 +8,7 @@ import Paper from "@mui/material/Paper";
 import { Box } from "@mui/material";
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-
-// function createData(
-//   name: string,
-//   category: string,
-//   date: string,
-//   amount: number,
-//   color: string,
-// ) {
-//   return { name, category, date, amount, color };
-// }
-
-// const rows = [
-//   createData("Grocery store", "Food", "May 24", 48.5, "#1D9E75"),
-//   createData("Salary", "Income", "May 22", 3200, "#0F6E56"),
-//   createData("Uber ride", "Transport", "May 21", 12.0, "#185FA5"),
-//   createData("Netflix", "Entertainment", "May 20", 15.99, "#854F0B"),
-// ];
+import { DeleteButton } from "./DeleteButton";
 
 export default async function RecentTransactions() {
   const session = await auth();
@@ -42,6 +26,7 @@ export default async function RecentTransactions() {
               <TableCell align="left">Category</TableCell>
               <TableCell align="left">Date</TableCell>
               <TableCell align="left">Amount</TableCell>
+              <TableCell align="left">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -50,7 +35,7 @@ export default async function RecentTransactions() {
                 key={transaction.description}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell align="left">{transaction.category}</TableCell>
+                <TableCell align="left">{transaction.description}</TableCell>
                 <TableCell align="left">
                   <span
                     style={{
@@ -69,6 +54,9 @@ export default async function RecentTransactions() {
                   {transaction.date.toLocaleDateString()}
                 </TableCell>
                 <TableCell align="left">{transaction.amount}</TableCell>
+                <TableCell align="left">
+                  <DeleteButton id={transaction.id} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
