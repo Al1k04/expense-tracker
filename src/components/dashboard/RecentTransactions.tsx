@@ -9,6 +9,7 @@ import { Box } from "@mui/material";
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { DeleteButton } from "./DeleteButton";
+import EditTransactionModal from "./EditTransactionModal";
 
 export default async function RecentTransactions() {
   const session = await auth();
@@ -55,7 +56,10 @@ export default async function RecentTransactions() {
                 </TableCell>
                 <TableCell align="left">{transaction.amount}</TableCell>
                 <TableCell align="left">
-                  <DeleteButton id={transaction.id} />
+                  <Box sx={{ display: "flex", gap: "20px" }}>
+                    <DeleteButton id={transaction.id} />
+                    <EditTransactionModal transaction={transaction} />
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}

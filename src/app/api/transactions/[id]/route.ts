@@ -35,3 +35,40 @@ export async function DELETE(
     );
   }
 }
+
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const session = await auth();
+  const user = session;
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  try {
+    const body = await request.json();
+    const { id } = await params;
+
+    const updateTransaction = await prisma.transaction.update({
+      where: { id },
+      data: {
+        ...body,
+        amount: parseFloat(body.amount),
+        date: new Date(body.date),
+      },
+    });
+    return NextResponse.json(
+      {
+        message: "Profile partially updated successfully",
+        updateTransaction: body,
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Invalid request body" },
+      { status: 400 },
+    );
+  }
+}
