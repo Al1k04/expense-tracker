@@ -23,6 +23,17 @@ model Transaction {
   user        User     @relation(fields: [userId], references: [id])
 }
 
+model Trip {
+  id          String   @id @default(cuid())
+  name        String
+  date        DateTime @default(now())
+  description String
+  budget      Float    @default(0.0)
+  type        String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
+
 model User {
   id            String        @id @default(cuid())
   email         String        @unique
@@ -35,6 +46,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   transactions  Transaction[]
+  trips         Trip[]
 }
 
 model Account {
