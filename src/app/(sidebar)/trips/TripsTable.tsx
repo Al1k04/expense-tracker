@@ -35,52 +35,54 @@ export default function TripsTable({
       : trips;
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="left">Description</TableCell>
-            <TableCell align="left">Date</TableCell>
-            <TableCell align="left">Budget</TableCell>
-            <TableCell align="left">Date</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredTrips.map((trips) => (
-            <TableRow
-              key={trips.description}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell align="left">{trips.description}</TableCell>
-              <TableCell align="left">
-                <span
-                  style={{
-                    backgroundColor:
-                      trips.type === "income" ? "#1D9E75" : "#A32D2D",
-                    color: "#fff",
-                    padding: "2px 10px",
-                    borderRadius: "12px",
-                    fontSize: "12px",
-                  }}
-                >
-                  {trips.type}
-                </span>
-              </TableCell>
-              <TableCell align="left">
-                {trips.date.toLocaleDateString()}
-              </TableCell>
-              <TableCell align="left">{trips.budget}</TableCell>
-              <TableCell align="left">
-                <Box sx={{ display: "flex", gap: "20px" }}>
-                  {/* <DeleteButton id={trips.id} /> */}
-                  {/* <EditTransactionModal trips={trips} /> */}
-                </Box>
-              </TableCell>
+    <Box sx={{ p: "20px", mx: "20px" }}>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Budget</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {filteredTrips.map((trips) => (
+              <TableRow
+                key={trips.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="left">{trips.name}</TableCell>
+                <TableCell align="left">
+                  <span
+                    style={{
+                      backgroundColor:
+                        trips.type === "income" ? "#1D9E75" : "#A32D2D",
+                      color: "#fff",
+                      padding: "2px 10px",
+                      borderRadius: "12px",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {trips.type}
+                  </span>
+                </TableCell>
+                <TableCell align="left">
+                  {trips.date.toLocaleDateString()}
+                </TableCell>
+                <TableCell align="left">{trips.budget}</TableCell>
+
+                <TableCell align="left">
+                  <Box sx={{ display: "flex", gap: "20px" }}>
+                    {/* <DeleteButton id={trips.id} /> */}
+                    {/* <EditTransactionModal trips={trips} /> */}
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { string } from "zod";
 
 export async function GET(request: NextRequest) {
   const session = await auth();
@@ -18,28 +19,27 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(trips);
 }
 
-export async function POST(response: NextRequest) {
+export async function POST(request: NextRequest) {
   const session = await auth();
-  const body = await response.json();
+  const body = await request.json();
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const trips = await prisma.trip.create({
+    const trip = await prisma.trip.create({
       data: {
-        description: body.description,
         name: body.name,
+        description: body.description,
         date: new Date(body.date),
         budget: parseFloat(body.budget),
+        type: body.type,
         userId: session.user.id,
       },
     });
-    return NextResponse.json(
-      { message: "Data received", data: body },
-      { status: 201 },
-    );
+
+    return NextResponse.json(trip, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }

@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import AddTransactionModal from "@/components/dashboard/AddTransactionModal";
 import TripsTable from "./TripsTable";
+import AddTripModal from "@/components/dashboard/AddTripModal";
 
 export default async function Trips() {
   const session = await auth();
@@ -12,7 +13,7 @@ export default async function Trips() {
   return (
     <>
       <TripsTable trips={getTrips} />
-      <AddTransactionModal />
+      <AddTripModal />
     </>
   );
 }

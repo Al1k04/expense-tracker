@@ -1,5 +1,6 @@
 "use client";
 import {
+  Box,
   Button,
   DialogActions,
   DialogContent,
@@ -14,16 +15,16 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
-export default function AddTransactionModal() {
+export default function AddTripModal() {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
 
   const [formData, setFormData] = useState({
+    name: "",
     description: "",
-    amount: "",
-    category: "",
-    type: "income",
+    budget: "",
+    type: "expense",
     date: "",
   });
 
@@ -39,7 +40,7 @@ export default function AddTransactionModal() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/transactions", {
+      const response = await fetch("/api/trips", {
         method: "POST",
         body: JSON.stringify(formData),
         headers: { "Content-Type": "application/json" },
@@ -50,10 +51,10 @@ export default function AddTransactionModal() {
         toast.success("Successfully", result);
         router.refresh();
         setFormData({
+          name: "",
           description: "",
-          amount: "",
-          category: "",
-          type: "income",
+          budget: "",
+          type: "expense",
           date: "",
         });
       } else {
@@ -66,7 +67,7 @@ export default function AddTransactionModal() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type: inputType } = e.target;
+    const { name, value } = e.target;
 
     setFormData((prevData) => ({
       ...prevData,
@@ -76,15 +77,25 @@ export default function AddTransactionModal() {
   return (
     <>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>Add New Transaction</DialogTitle>
+        <DialogTitle>Add New Trip</DialogTitle>
 
         <form onSubmit={handleFormSubmit}>
           <DialogContent dividers>
             <DialogContentText sx={{ mb: 2 }}>
-              Enter the details of your financial transaction below.
+              Enter the details of your financial trip below.
             </DialogContentText>
 
             <Stack spacing={3}>
+              <TextField
+                required
+                autoFocus
+                label="Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+              />
               <TextField
                 required
                 autoFocus
@@ -98,18 +109,16 @@ export default function AddTransactionModal() {
 
               <TextField
                 required
-                label="Amount"
-                name="amount"
+                label="Budget"
+                name="budget"
                 type="number"
-                value={formData.amount}
+                value={formData.budget}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
-                slotProps={{ htmlInput: { step: "0.01", min: "0.01" } }}
               />
 
               <TextField
-                select
                 label="Transaction Type"
                 name="type"
                 value={formData.type}
@@ -118,17 +127,7 @@ export default function AddTransactionModal() {
                 variant="outlined"
               >
                 <MenuItem value="expense">Expense</MenuItem>
-                <MenuItem value="income">Income</MenuItem>
               </TextField>
-
-              <TextField
-                label="Category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
 
               <TextField
                 label="Date"
@@ -137,7 +136,11 @@ export default function AddTransactionModal() {
                 value={formData.date}
                 onChange={handleChange}
                 fullWidth
-                variant="outlined"
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
               />
             </Stack>
           </DialogContent>
@@ -147,19 +150,21 @@ export default function AddTransactionModal() {
               Cancel
             </Button>
             <Button type="submit" variant="contained">
-              Submit Transaction
+              Submit Trip
             </Button>
           </DialogActions>
         </form>
       </Dialog>
-      <Button
-        onClick={() => handleOpen()}
-        type="submit"
-        variant="contained"
-        color="primary"
-      >
-        + Add Transaction
-      </Button>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mr: "40px" }}>
+        <Button
+          onClick={() => handleOpen()}
+          type="submit"
+          variant="contained"
+          color="primary"
+        >
+          + Add Trip
+        </Button>
+      </Box>
     </>
   );
 }
