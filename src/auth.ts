@@ -9,7 +9,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
-      // Credentials define the fields on the default sign-in page
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
@@ -45,12 +44,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
       if (user) token.id = user.id;
+      if (!user) {
+        return token;
+      }
+      const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { currency: true },
+      });
+      if (dbUser) {
+        token.currency = dbUser.currency;
+      }
       return token;
     },
-    session({ session, token }) {
+    async session({ session, token }) {
       session.user.id = token.id as string;
+      if (session.user) {
+        session.user.currency = token.currency as string;
+      }
       return session;
     },
   },

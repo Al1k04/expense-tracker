@@ -46,6 +46,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   transactions  Transaction[]
+  currency      String        @default("USD")
   trips         Trip[]
 }
 
