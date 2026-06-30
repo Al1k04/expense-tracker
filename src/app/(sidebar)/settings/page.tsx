@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { Avatar, Box, Paper, TextField, Typography } from "@mui/material";
 import SignOutButton from "@/components/SignOutButton";
 import CurrencySelect from "@/components/CurrencySelect";
+import { SendReportButton } from "@/components/SendReportButton";
 
 export default async function Settings() {
   const session = await auth();
@@ -81,7 +82,10 @@ export default async function Settings() {
           justifyContent: "flex-end",
         }}
       >
-        <SignOutButton />
+        <Box sx={{ display: "flex", gap: "10px" }}>
+          <SendReportButton />
+          <SignOutButton />
+        </Box>
       </Paper>
     </Box>
   );

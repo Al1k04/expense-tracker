@@ -77,7 +77,11 @@ export const Charts: React.FC<ChartsProps> = ({ transactions }) => {
     <Box
       sx={{
         display: "grid",
-        gridTemplateColumns: "1fr 1fr",
+        gridTemplateColumns: {
+          xs: "1fr",
+          sm: "1fr",
+          md: "repeat(2, 1fr)",
+        },
         gap: 2,
         mt: "60px",
       }}
