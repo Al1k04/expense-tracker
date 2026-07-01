@@ -31,7 +31,7 @@ export default async function Settings() {
             src={session?.user?.image ?? undefined}
           />
           <Box>
-            <Typography fontWeight={500}>{name}</Typography>
+            <Typography sx={{ fontWeight: 500 }}>{name}</Typography>
             <Typography variant="body2" color="text.secondary">
               {email}
             </Typography>
