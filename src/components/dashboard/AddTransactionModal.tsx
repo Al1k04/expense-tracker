@@ -157,6 +157,7 @@ export default function AddTransactionModal() {
         type="submit"
         variant="contained"
         color="primary"
+        sx={{ fontSize: "12px", width: { xs: "auto", md: "250px" } }}
       >
         + Add Transaction
       </Button>

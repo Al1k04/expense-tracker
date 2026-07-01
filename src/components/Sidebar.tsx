@@ -14,6 +14,8 @@ import {
   Plane,
   Settings,
   Info,
+  Menu,
+  X,
 } from "lucide-react";
 import {
   List,
@@ -22,7 +24,9 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
 export default function Sidebar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const drawerWidth = 240;
 
   const pathname = usePathname();
@@ -39,36 +43,53 @@ export default function Sidebar() {
   ];
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <>
+      <Box sx={{ display: { xs: "block", md: "none" } }}>
+        <Button onClick={() => setMobileOpen(true)}>
+          <Menu />
+        </Button>
+      </Box>
       <Drawer
-        variant="permanent"
+        variant="temporary"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
         sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-
+          display: { xs: "block", md: "none" },
           "& .MuiDrawer-paper": {
             width: 280,
-            boxSizing: "border-box",
             backgroundColor: "primary.dark",
           },
         }}
       >
-        <Typography
-          variant="h1"
-          component="h2"
+        <Box
           sx={{
-            mt: 2,
-            p: 2,
-            fontSize: "22px",
-            fontWeight: "bold",
-            borderBottom: 1,
-            borderColor: "#808080",
-            color: "primary.light",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            px: 2,
           }}
         >
-          Expense<span style={{ color: "#1D9E75" }}>Tracker</span>
-        </Typography>
+          <Typography
+            variant="h1"
+            component="h2"
+            sx={{
+              mt: 2,
+              p: 2,
+              fontSize: "22px",
+              fontWeight: "bold",
+              borderBottom: 1,
+              borderColor: "#808080",
+              color: "primary.light",
+            }}
+          >
+            Expense<span style={{ color: "#1D9E75" }}>Tracker</span>
+          </Typography>
+          <Button onClick={() => setMobileOpen(false)}>
+            <X size={20} />
+          </Button>
+        </Box>
         <Toolbar />
+
         <List>
           {navItems.map((item) => (
             <ListItem
@@ -122,6 +143,90 @@ export default function Sidebar() {
           )}
         </Box>
       </Drawer>
-    </Box>
+      <Box sx={{ display: { xs: "none", md: "flex" } }}>
+        <Drawer
+          variant="permanent"
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+
+            "& .MuiDrawer-paper": {
+              width: 280,
+              boxSizing: "border-box",
+              backgroundColor: "primary.dark",
+            },
+          }}
+        >
+          <Typography
+            variant="h1"
+            component="h2"
+            sx={{
+              mt: 2,
+              p: 2,
+              fontSize: "22px",
+              fontWeight: "bold",
+              borderBottom: 1,
+              borderColor: "#808080",
+              color: "primary.light",
+            }}
+          >
+            Expense<span style={{ color: "#1D9E75" }}>Tracker</span>
+          </Typography>
+          <Toolbar />
+          <List>
+            {navItems.map((item) => (
+              <ListItem
+                key={item.label}
+                sx={{
+                  color: "primary.light",
+                  borderLeft:
+                    pathname === item.path ? "3px solid #1D9E75" : "none",
+                }}
+              >
+                <ListItemButton component={Link} href={item.path}>
+                  <item.icon size={20} />
+                  <ListItemText primary={item.label} sx={{ ml: "20px" }} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+          <Box
+            sx={{
+              mt: "auto",
+              mb: "50px",
+              p: "10px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            {status === "authenticated" ? (
+              <div className="flex ">
+                <p className="text-white flex-1 mr-5 items-center">
+                  Welcome back, <strong>{session?.user?.name}</strong>!
+                </p>
+
+                <Button
+                  variant="contained"
+                  onClick={() => signOut()}
+                  sx={{ p: "4px 8px" }}
+                >
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Button variant="contained" component={Link} href="/login">
+                  Login
+                </Button>
+                <Button variant="contained" component={Link} href="/signUp">
+                  SignUp
+                </Button>
+              </div>
+            )}
+          </Box>
+        </Drawer>
+      </Box>
+    </>
   );
 }

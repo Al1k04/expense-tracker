@@ -37,7 +37,7 @@ export default function TripsTable({
   return (
     <Box sx={{ p: "20px", mx: "20px" }}>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 300 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>

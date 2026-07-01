@@ -35,8 +35,8 @@ export default function ExpensesTable({
       : transactions.filter((t) => t.type === filter);
 
   return (
-    <Box sx={{ mt: 4, mx: 10 }}>
-      <Box sx={{ mt: 4, mx: 10, float: "right" }}>
+    <Box sx={{ mt: 4, mx: { xs: 1, md: 10 } }}>
+      <Box sx={{ mt: 4, mx: { xs: 1, md: 10 }, float: "right" }}>
         <Box sx={{ mb: 2, display: "flex", gap: 1 }}>
           <Button onClick={() => setFilter("all")}>All</Button>
           <Button
@@ -57,12 +57,20 @@ export default function ExpensesTable({
         </Box>
       </Box>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table
+          sx={{ tableLayout: "fixed", width: "100%" }}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow>
               <TableCell>Description</TableCell>
               <TableCell align="left">Category</TableCell>
-              <TableCell align="left">Date</TableCell>
+              <TableCell
+                align="left"
+                sx={{ display: { xs: "none", md: "table-cell" } }}
+              >
+                Date
+              </TableCell>
               <TableCell align="left">Amount</TableCell>
               <TableCell align="left">Actions</TableCell>
             </TableRow>
@@ -70,7 +78,7 @@ export default function ExpensesTable({
           <TableBody>
             {filteredTransactions.map((transaction) => (
               <TableRow
-                key={transaction.description}
+                key={transaction.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="left">{transaction.description}</TableCell>
@@ -88,12 +96,21 @@ export default function ExpensesTable({
                     {transaction.category}
                   </span>
                 </TableCell>
-                <TableCell align="left">
+                <TableCell
+                  align="left"
+                  sx={{ display: { xs: "none", md: "table-cell" } }}
+                >
                   {transaction.date.toLocaleDateString()}
                 </TableCell>
                 <TableCell align="left">{transaction.amount}</TableCell>
-                <TableCell align="left">
-                  <Box sx={{ display: "flex", gap: "20px" }}>
+                <TableCell align="left" sx={{ whiteSpace: "nowrap" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: { xs: "column", md: "row" },
+                      gap: "4px",
+                    }}
+                  >
                     <DeleteButton id={transaction.id} />
                     <EditTransactionModal transaction={transaction} />
                   </Box>

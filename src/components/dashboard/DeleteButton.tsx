@@ -30,11 +30,12 @@ export function DeleteButton({ id }: { id: string }) {
 
   return (
     <Button
+      size="small"
       disabled={isLoading}
       variant="contained"
       onClick={() => handleDelete()}
     >
-      <Trash2 size={16} />
+      <Trash2 size={10} />
     </Button>
   );
 }

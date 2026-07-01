@@ -18,16 +18,26 @@ export default async function RecentTransactions() {
     where: { userId: session?.user?.id },
   });
   return (
-    <Box sx={{ mt: 4, mx: 10 }}>
+    <Box sx={{ mt: 4, mx: { xs: 0, md: 10 } }}>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Description</TableCell>
               <TableCell align="left">Category</TableCell>
-              <TableCell align="left">Date</TableCell>
+              <TableCell
+                align="left"
+                sx={{ display: { xs: "none", md: "table-cell" } }}
+              >
+                Date
+              </TableCell>
               <TableCell align="left">Amount</TableCell>
-              <TableCell align="left">Actions</TableCell>
+              <TableCell
+                // sx={{ display: { xs: "none", sm: "table-cell" } }}
+                align="left"
+              >
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -51,12 +61,18 @@ export default async function RecentTransactions() {
                     {transaction.category}
                   </span>
                 </TableCell>
-                <TableCell align="left">
+                <TableCell
+                  sx={{ display: { xs: "none", md: "table-cell" } }}
+                  align="left"
+                >
                   {transaction.date.toLocaleDateString()}
                 </TableCell>
                 <TableCell align="left">{transaction.amount}</TableCell>
-                <TableCell align="left">
-                  <Box sx={{ display: "flex", gap: "20px" }}>
+                <TableCell
+                  // sx={{ display: { xs: "none", md: "table-cell" } }}
+                  align="left"
+                >
+                  <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                     <DeleteButton id={transaction.id} />
                     <EditTransactionModal transaction={transaction} />
                   </Box>

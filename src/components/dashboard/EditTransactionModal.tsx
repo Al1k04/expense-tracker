@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -80,7 +81,7 @@ export default function EditTransactionModal({
   return (
     <>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>Edit Transaction</DialogTitle>
+        <DialogTitle>Edit</DialogTitle>
 
         <form onSubmit={handleFormSubmit}>
           <DialogContent dividers>
@@ -157,12 +158,13 @@ export default function EditTransactionModal({
         </form>
       </Dialog>
       <Button
+        size="small"
         onClick={() => handleOpen()}
         type="submit"
         variant="contained"
         color="primary"
       >
-        Edit Transaction
+        <Pencil size={10} />
       </Button>
     </>
   );
