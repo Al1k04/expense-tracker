@@ -43,7 +43,7 @@ export default async function RecentTransactions() {
           <TableBody>
             {transactions.map((transaction) => (
               <TableRow
-                key={transaction.description}
+                key={transaction.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="left">{transaction.description}</TableCell>
@@ -68,10 +68,7 @@ export default async function RecentTransactions() {
                   {transaction.date.toLocaleDateString()}
                 </TableCell>
                 <TableCell align="left">{transaction.amount}</TableCell>
-                <TableCell
-                  // sx={{ display: { xs: "none", md: "table-cell" } }}
-                  align="left"
-                >
+                <TableCell align="left">
                   <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                     <DeleteButton id={transaction.id} />
                     <EditTransactionModal transaction={transaction} />
