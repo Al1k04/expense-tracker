@@ -35,10 +35,7 @@ export async function POST(request: Request) {
       { status: 201 },
     );
   } catch (error) {
-    // 6. Handle parsing or server errors
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+    console.error("Register error:", error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
