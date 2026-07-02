@@ -1,15 +1,14 @@
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient } from "@prisma/client";
+
+const prismaClientSingleton = () => {
+  return new PrismaClient();
+};
 
 declare const globalThis: {
-  prismaGlobal: PrismaClient;
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
 } & typeof global;
 
-if (!globalThis.prismaGlobal) {
-  globalThis.prismaGlobal = new PrismaClient({
-    datasourceUrl:
-      process.env.DATABASE_URL ?? "postgresql://localhost:5432/expense_tracker",
-  });
-}
-
-const prisma = globalThis.prismaGlobal;
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 export default prisma;
+
+if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
