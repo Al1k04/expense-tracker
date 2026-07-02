@@ -5,7 +5,10 @@ declare const globalThis: {
 } & typeof global;
 
 if (!globalThis.prismaGlobal) {
-  globalThis.prismaGlobal = new PrismaClient();
+  globalThis.prismaGlobal = new PrismaClient({
+    datasourceUrl:
+      process.env.DATABASE_URL ?? "postgresql://localhost:5432/expense_tracker",
+  });
 }
 
 const prisma = globalThis.prismaGlobal;
