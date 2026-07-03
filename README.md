@@ -2,7 +2,7 @@
 
 A fullstack personal finance management app built with Next.js 16, TypeScript, and PostgreSQL.
 
-🔗 **Live Demo:** [Add link after deploy]
+🔗 **Live Demo:** [expense-tracker-157e.vercel.app](https://expense-tracker-157e.vercel.app)
 
 ---
 
